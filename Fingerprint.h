@@ -19,7 +19,7 @@ private:
 public:
   Fingerprint();
 
-  void setup(uint8_t pinRx, uint8_t pinTx);
+  bool setup(uint8_t pinRx, uint8_t pinTx);
   void loop();
 
   bool read();

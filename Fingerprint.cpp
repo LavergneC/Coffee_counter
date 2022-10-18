@@ -4,7 +4,7 @@
 
 Fingerprint::Fingerprint(){}
 
-void Fingerprint::setup(uint8_t pinRx, uint8_t pinTx){
+bool Fingerprint::setup(uint8_t pinRx, uint8_t pinTx){
   Serial.println("\n\nBuilding Fingerprint");
   delay(100);
   _mySerial = new SoftwareSerial(pinRx, pinTx);
@@ -24,8 +24,8 @@ void Fingerprint::setup(uint8_t pinRx, uint8_t pinTx){
   if (_finger->verifyPassword()) {
     Serial.println("Found fingerprint sensor!");
   } else {
-    Serial.println("Did not find fingerprint sensor: lock loop.");
-    while (1) { delay(1); }
+    Serial.println("Did not find fingerprint sensor");
+    return false;
   }
 
   Serial.println(F("Reading sensor parameters"));
@@ -47,6 +47,8 @@ void Fingerprint::setup(uint8_t pinRx, uint8_t pinTx){
     Serial.println("Waiting for valid finger...");
     Serial.print("Sensor contains "); Serial.print(_finger->templateCount); Serial.println(" templates");
   }
+
+  return true;
 }
 
 void Fingerprint::loop(){

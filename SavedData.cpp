@@ -31,6 +31,11 @@ void SavedData::reset(){
 }
 
 int SavedData::getScore(Person person){
+  if(person >= UNKOWN || person < CLAV)
+  {
+    return -1;
+  }
+  
   return scores[person];
 }
 
