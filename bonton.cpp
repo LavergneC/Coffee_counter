@@ -1,12 +1,12 @@
 
 #include "Bouton.h"
 
-RebBouton::RebBouton(int pin, int delay): m_didPin(pin), m_debounceDelay(delay)
+Bouton::Bouton(int pin, int delay): m_didPin(pin), m_debounceDelay(delay)
 {
   pinMode(pin, INPUT);
 }
 
-bool RebBouton::pressed(){
+bool Bouton::pressed(){
   bool ret = m_buttonPressed;
 
   if(m_buttonPressed && !m_didStatusRead )
@@ -15,7 +15,7 @@ bool RebBouton::pressed(){
   return ret;
 }
 
-void RebBouton::loop() {
+void Bouton::loop() {
   int reading = digitalRead(m_didPin);
   if (reading != m_oldDidStatus) {
     m_lastDebounceTime = millis();

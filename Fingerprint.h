@@ -10,13 +10,20 @@ private:
   SoftwareSerial* _mySerial;
   Adafruit_Fingerprint* _finger;
   
+  bool _finger_read = false;
+  Person _last_person = UNKOWN;
+  
+  bool getFingerprintData();
+  bool getFingerprintData2();
+  
 public:
   Fingerprint();
 
   void setup(uint8_t pinRx, uint8_t pinTx);
   void loop();
-  uint8_t getFingerprintID();
-  int getFingerprintIDez();
+
+  bool read();
+  Person last_person_read(){return _last_person;}
 };
 
 #endif

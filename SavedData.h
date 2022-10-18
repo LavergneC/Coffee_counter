@@ -5,12 +5,12 @@
 #include "Arduino.h"
 
 enum Person{
-  NROL = 0,
-  CLAV,
-  VLUC,
-  PCO,
-  JCHA,
-  AMAA,
+  CLAV = 1,
+  VLUC = 2,
+  PCO = 3,
+  JCHA = 4,
+  AMAA = 5,
+  NROL = 6,
   UNKOWN //last
 };
 

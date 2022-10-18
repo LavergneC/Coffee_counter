@@ -1,5 +1,7 @@
 #include "Fingerprint.h"
 
+#define LOOP_DELAY 50 // ms
+
 Fingerprint::Fingerprint(){}
 
 void Fingerprint::setup(uint8_t pinRx, uint8_t pinTx){
@@ -48,11 +50,26 @@ void Fingerprint::setup(uint8_t pinRx, uint8_t pinTx){
 }
 
 void Fingerprint::loop(){
-  getFingerprintID();
-  delay(50);            //don't ned to run this at full speed.*/
+  static unsigned long lastExec = millis();
+
+  if(millis() - lastExec < LOOP_DELAY)
+    return; 
+
+  _finger_read = getFingerprintData(); // also update _last_person
+
+  lastExec = millis();
 }
 
-uint8_t Fingerprint::getFingerprintID(){
+bool Fingerprint::read(){
+  bool ret = _finger_read;
+  _finger_read = false;
+  
+  return ret;
+}
+
+// Return value : false -> no  finger detected
+//                true -> Finger detected (may be unknow)
+bool Fingerprint::getFingerprintData(){
   uint8_t p = _finger->getImage();
   switch (p) {
     case FINGERPRINT_OK:
@@ -60,16 +77,16 @@ uint8_t Fingerprint::getFingerprintID(){
       break;
     case FINGERPRINT_NOFINGER:
       Serial.println("No finger detected");
-      return p;
+      return false;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
-      return p;
+      return false;
     case FINGERPRINT_IMAGEFAIL:
       Serial.println("Imaging error");
-      return p;
+      return false;
     default:
       Serial.println("Unknown error");
-      return p;
+      return false;
   }
 
   // OK success!
@@ -81,19 +98,19 @@ uint8_t Fingerprint::getFingerprintID(){
       break;
     case FINGERPRINT_IMAGEMESS:
       Serial.println("Image too messy");
-      return p;
+      return false;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
-      return p;
+      return false;
     case FINGERPRINT_FEATUREFAIL:
       Serial.println("Could not find fingerprint features");
-      return p;
+      return false;
     case FINGERPRINT_INVALIDIMAGE:
       Serial.println("Could not find fingerprint features");
-      return p;
+      return false;
     default:
       Serial.println("Unknown error");
-      return p;
+      return false;
   }
 
   // OK converted!
@@ -102,34 +119,46 @@ uint8_t Fingerprint::getFingerprintID(){
     Serial.println("Found a print match!");
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");
-    return p;
+    return false;
   } else if (p == FINGERPRINT_NOTFOUND) {
     Serial.println("Did not find a match");
-    return p;
+    _last_person = UNKOWN;
+    return true;
   } else {
     Serial.println("Unknown error");
-    return p;
+    return false;
   }
 
   // found a match!
   Serial.print("Found ID #"); Serial.print(_finger->fingerID);
   Serial.print(" with confidence of "); Serial.println(_finger->confidence);
 
-  return _finger->fingerID;
+  _last_person = _finger->fingerID;
+  return true;
 }
 
-int Fingerprint::getFingerprintIDez(){
+bool Fingerprint::getFingerprintData2(){
   uint8_t p = _finger->getImage();
-  if (p != FINGERPRINT_OK)  return -1;
+  if(p != FINGERPRINT_OK){
+    return false;
+  }
 
   p = _finger->image2Tz();
-  if (p != FINGERPRINT_OK)  return -1;
+  if(p != FINGERPRINT_OK){
+    return false;
+  }
 
-  p = _finger->fingerFastSearch();
-  if (p != FINGERPRINT_OK)  return -1;
+  p = _finger->fingerSearch();
+  if(p == FINGERPRINT_NOTFOUND){
+    _last_person = UNKOWN;
+    return true;
+  }
 
-  // found a match!
-  Serial.print("Found ID #"); Serial.print(_finger->fingerID);
-  Serial.print(" with confidence of "); Serial.println(_finger->confidence);
-  return _finger->fingerID;
+  if (p != FINGERPRINT_OK) {
+    return false;
+  }
+
+  // Found someone
+  _last_person = _finger->fingerID;
+  return true;  
 }

@@ -4,7 +4,7 @@
 
 #include "Arduino.h"
 
-class RebBouton
+class Bouton
 {
 private:
   const unsigned long m_debounceDelay;
@@ -18,7 +18,7 @@ private:
   bool m_oldDidStatus = false;
 
 public:
-  RebBouton(int pin, int delay = 50);
+  Bouton(int pin, int delay = 50);
   
   void loop();
   bool pressed();
