@@ -2,9 +2,14 @@
 
 #define LOOP_DELAY 50 // ms
 
+const bool bypass = false;
+
 Fingerprint::Fingerprint(){}
 
 bool Fingerprint::setup(uint8_t pinRx, uint8_t pinTx){
+  if(bypass)
+    return true;
+
   Serial.println("\n\nBuilding Fingerprint");
   delay(100);
   _mySerial = new SoftwareSerial(pinRx, pinTx);
@@ -52,6 +57,9 @@ bool Fingerprint::setup(uint8_t pinRx, uint8_t pinTx){
 }
 
 void Fingerprint::loop(){
+  if(bypass)
+    return true;
+    
   static unsigned long lastExec = millis();
 
   if(millis() - lastExec < LOOP_DELAY)
@@ -63,6 +71,9 @@ void Fingerprint::loop(){
 }
 
 bool Fingerprint::read(){
+  if(bypass)
+    return false;
+
   bool ret = _finger_read;
   _finger_read = false;
   
@@ -72,13 +83,16 @@ bool Fingerprint::read(){
 // Return value : false -> no  finger detected
 //                true -> Finger detected (may be unknow)
 bool Fingerprint::getFingerprintData(){
+  if(bypass)
+    return false;
+
   uint8_t p = _finger->getImage();
   switch (p) {
     case FINGERPRINT_OK:
       Serial.println("Image taken");
       break;
     case FINGERPRINT_NOFINGER:
-      Serial.println("No finger detected");
+      //Serial.println("No finger detected");
       return false;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -140,6 +154,9 @@ bool Fingerprint::getFingerprintData(){
 }
 
 bool Fingerprint::getFingerprintData2(){
+  if(bypass)
+    return true;
+    
   uint8_t p = _finger->getImage();
   if(p != FINGERPRINT_OK){
     return false;

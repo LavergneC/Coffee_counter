@@ -15,6 +15,6 @@
 #define LCD5 A2
 #define LCD6 A3
 
-#define POTAR A5
+#define LCD_LED A5
 
 #endif

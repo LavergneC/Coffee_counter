@@ -80,3 +80,17 @@ String SavedData::toString(Person person){
 
   return "Personne non trouvée";
 }
+
+void SavedData::setScore(Person person, int score)
+{
+  if(person >= UNKOWN || person < CLAV){
+    Serial.println("setScore error, person is out of range");
+    Serial.println(person);
+    return;
+  }
+
+  scores[person] = score;
+
+  if(enable_EEPROM)
+    EEPROM.write((int)person, scores[person]);
+}
