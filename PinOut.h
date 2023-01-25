@@ -6,6 +6,8 @@
 #define LED_GREEN 6
 
 #define BTN_RESET 8
+#define BTN_1 3
+#define BTN_2 2
 #define BIPPER 9
 
 #define LCD1 12
@@ -16,5 +18,10 @@
 #define LCD6 A3
 
 #define LCD_LED A5
+
+//#define FINGER_RX A1
+//#define FINGER_TX A0
+#define FINGER_RX 0
+#define FINGER_TX 1
 
 #endif

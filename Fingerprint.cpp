@@ -12,7 +12,7 @@ bool Fingerprint::setup(uint8_t pinRx, uint8_t pinTx){
 
   Serial.println("\n\nBuilding Fingerprint");
   delay(100);
-  _mySerial = new SoftwareSerial(pinRx, pinTx);
+  _mySerial = &Serial1;
   
   Serial.println("\n\nSerial creation...");
    delay(100);

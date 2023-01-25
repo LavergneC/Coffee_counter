@@ -7,7 +7,7 @@
 class Fingerprint
 {
 private:
-  SoftwareSerial* _mySerial;
+  HardwareSerial* _mySerial;
   Adafruit_Fingerprint* _finger;
   
   bool _finger_read = false;

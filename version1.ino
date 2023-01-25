@@ -21,19 +21,23 @@ MyMusique musique(BIPPER);
 Person lastPerson = UNKOWN + 1;
 
 void setup(){
+  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_YELLOW, OUTPUT);
+  pinMode(LED_GREEN, OUTPUT);
+
+  digitalWrite(LED_RED, true);
+  
   Serial.begin(9600);
   savedData.setup();
   screen.setup(&savedData);
 
-  bool sucess = fingerprint.setup(A1, A0);
+  bool sucess = fingerprint.setup(FINGER_RX, FINGER_TX);
   if(!sucess){
     screen.printFingerError();
     while(1){delay(100);}
   }
 
-  pinMode(LED_RED, OUTPUT);
-  pinMode(LED_YELLOW, OUTPUT);
-  pinMode(LED_GREEN, OUTPUT);
+  digitalWrite(LED_RED, false);
 }
 
 void sucessSequence(Person person){
@@ -67,6 +71,7 @@ void loop() {
 
   if(fingerprint.read())
   {
+    screen.forceUpdateScreen();
     Person readFinger = fingerprint.last_person_read();
         
     if(readFinger != UNKOWN) {
@@ -74,8 +79,6 @@ void loop() {
     } else {
       errorSequence();
     }
-
-    screen.forceUpdateScreen();
   }
 
   if(boutonReset.pressed())
