@@ -9,7 +9,7 @@ Screen::Screen(int pin1, int pin2, int pin3, int pin4, int pin5, int pin6, int l
   _lcd = new LiquidCrystal(pin1, pin2, pin3, pin4, pin5, pin6);
 }
 
-void Screen::setup(SavedData* savedData)
+void Screen::setup(SavedData* savedData, int version[4])
 {
   _lcd->begin(16, 2);
   _savedData = savedData;
@@ -17,6 +17,20 @@ void Screen::setup(SavedData* savedData)
   pinMode(_led_pin, OUTPUT);
   digitalWrite(_led_pin, true);
   _sleepTime = millis();
+
+  printVersion(version);
+}
+
+void Screen::printVersion(int version[4]){
+  _lcd->print("Version");
+  _lcd->setCursor(0, 1);
+  _lcd->print(version[0]);
+  _lcd->print(".");
+  _lcd->print(version[1]);
+  _lcd->print(".");
+  _lcd->print(version[2]);
+  if(version[3])
+    _lcd->print(" WIP");
 }
 
 void Screen::loop(){

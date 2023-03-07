@@ -19,13 +19,14 @@ private:
 
 public:
   Screen(int pin1, int pin2, int pin3, int pin4, int pin5, int pin6, int led_pin);
-  void setup(SavedData* savedData);
+  void setup(SavedData* savedData, int version[4]);
 
   void loop();
   void updateScreen();
   void forceUpdateScreen();
   void wakeup();
 
+  void printVersion(int version[4]);
   void printCoffees(String nom, int score);
   void printFingerError();
   void printWrongFinger();

@@ -15,6 +15,7 @@ private:
 public:
   MyMusique(int pin);
 
+  void playBoot();
   void playSucess(int high);
   void playError();
   void playReset();

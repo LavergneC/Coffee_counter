@@ -25,6 +25,16 @@ void MyMusique::playSucess(int high)
   delay(100);
 }
 
+void MyMusique::playBoot(){
+  playNote(2, 4, 200);
+  delay(300);
+
+  playNote(2, 4, 200);
+  delay(300);
+
+  playNote(1, 5, 100);
+}
+
 void MyMusique::playError()
 {
   playNote(0, 300);

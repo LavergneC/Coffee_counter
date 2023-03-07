@@ -12,6 +12,9 @@
 #define PRINT_DELAY 2000
 #define ERROR_DELAY 300
 
+#define WIP 0
+#define VERSION {1, 0, 0, WIP} // major, minor, patch, wip(bool)
+
 // Variables initialization
 Screen screen(LCD1, LCD2, LCD3, LCD4, LCD5, LCD6, LCD_LED);
 SavedData savedData;
@@ -29,7 +32,9 @@ void setup(){
   
   Serial.begin(9600);
   savedData.setup();
-  screen.setup(&savedData);
+
+  int version[4] = VERSION;
+  screen.setup(&savedData, version);
 
   bool sucess = fingerprint.setup(FINGER_RX, FINGER_TX);
   if(!sucess){
@@ -38,6 +43,8 @@ void setup(){
   }
 
   digitalWrite(LED_RED, false);
+  musique.playBoot();
+  delay(1000);
 }
 
 void sucessSequence(Person person){
