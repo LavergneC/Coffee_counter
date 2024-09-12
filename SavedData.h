@@ -11,6 +11,7 @@ enum Person{
   JCHA = 4, 
   AMAA = 5,
   NROL = 6,
+  JDUV = 7,
   UNKOWN //last
 };
 

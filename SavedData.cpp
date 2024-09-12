@@ -68,10 +68,13 @@ String SavedData::toString(Person person){
       return "Pierre";
 
     case JCHA:
-      return "Jean";
+      return "Jean.C";
 
     case AMAA:
       return "Alexis";
+
+    case JDUV:
+      return "Jean.D";
 
     case UNKOWN:
     default:
